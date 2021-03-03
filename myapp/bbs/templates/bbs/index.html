@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+  <style>
+    tr  {
+      counter-increment : rownum ; 
+    }
+    
+    .align-middle:first-child:before { 
+      content: counter(rownum); 
+    }
+
+  </style>
+  <title>にじさんじch登録者数ランキング</title>
+</head>
+<body>
+  <script>
+
+   $(function(){
+
+      let updown = $(".table").tablesorter({
+        headers:{
+          0:{sorter:false},
+          1:{sorter:false}, 
+          2:{sorter:false}, 
+        }
+      });
+
+      $("#up").click(function() {
+       updown.trigger("sorton", [ [[$(list).val(), 0]] ]);
+      });
+      $("#down").click(function() {
+       updown.trigger("sorton", [ [[$(list).val(), 1]] ]);
+      });
+
+    });
+
+
+   </script>
+  <nav class="navbar navbar-light bg-light mb-3">
+    <a href="#" class="navbar-brand">
+      <img src="https://nijisanji.ichikara.co.jp/wp-content/uploads/2020/01/nijisanji_logo_retina.png" alt="にじさんじロゴ" width="200">
+      ch登録者数ランキング
+    </a>
+  </nav>
+
+  <p class="p-2 pr-5 m-0 text-right">
+    <select name="list" id="list">
+      <option value="3">登録者数</option>
+      <option value="4">登録日時</option>    
+      <option value="5">総再生回数</option>
+    </select>
+    <input id="up" type="button" value="昇順" class="btn btn-primary">
+    <input id="down" type="button" value="降順" class="btn btn-primary">
+ </p>
+
+  <div class="pl-5 pr-5 pt-0">
+    <table class="table">
+      <thead class="thead-light" class="tablesorter">
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col" >ch名</th>
+          <th scope="col" >登録者数</th>
+          <th scope="col" >登録日時</th>
+          <th scope="col">総再生回数</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o,p,q,r,s in zesyukei %}
+          <tr scope="row">
+            <th class="align-middle"></th>
+            <th class="align-middle"><img src={{o}} class="rounded-circle" alt="アイコン" width="80"></th>
+            <th class="align-middle">{{p}}</th>
+            <th class="align-middle">{{s}}</th>
+            <th class="align-middle">{{q}}</th>
+            <th class="align-middle">{{r}}</th>
+          </tr>
+        {% endfor %}
+      </tbody>
+    
+    </table>
+  </div>
+  <div class="p-5 pr-30 pl-30">
+    <form action='{% url "bbs:create" %}' method="POST" class="form">
+      {% load bootstrap4 %}
+      {% csrf_token %}
+      {% bootstrap_form commentForm layout="horizontal" %}
+      <button type="submit" class="btn btn-outline-primary">投稿する</button>    
+    </form>
+  </div>
+  <h2>コメント一覧</h2>
+   {% for comment in comments %}
+      <p>name：{{comment.name}}</p>
+      <p>content：{{comment.content}}</p>
+    {% endfor %}
+</body>
+</html>
