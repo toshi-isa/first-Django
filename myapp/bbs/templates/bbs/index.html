@@ -86,7 +86,7 @@
     
     </table>
   </div>
-  <div class="p-5 pr-30 pl-30">
+<div class="p-5 w-75">
     <form action='{% url "bbs:create" %}' method="POST" class="form">
       {% load bootstrap4 %}
       {% csrf_token %}
@@ -94,10 +94,12 @@
       <button type="submit" class="btn btn-outline-primary">投稿する</button>    
     </form>
   </div>
-  <h2>コメント一覧</h2>
+  <h2 class="text-center">コメント一覧</h2>
    {% for comment in comments %}
-      <p>name：{{comment.name}}</p>
+    <div class="p-5">
+      <p>No.{{comment.id}}　name：{{comment.name}}</p>
       <p>content：{{comment.content}}</p>
+    </div>
     {% endfor %}
 </body>
 </html>
